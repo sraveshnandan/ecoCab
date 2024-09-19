@@ -4,7 +4,7 @@ import { icons } from "@/constants";
 import { GoogleInputProps } from "@/types/type";
 import { useLocationStore } from "@/store";
 import { useEffect, useState } from "react";
-import axios from "axios"
+import axios from "axios";
 
 const OlaMapsApiKey = process.env.EXPO_PUBLIC_OLA_MAP_API_KEY;
 

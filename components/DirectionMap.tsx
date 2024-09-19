@@ -5,7 +5,7 @@ import { useLocationStore } from '@/store';
 import polyline from '@mapbox/polyline';
 
 const MapScreen = () => {
-    const [routeCoordinates, setRouteCoordinates] = useState([]);
+    const { routeCoordinates, setRootCordinates } = useLocationStore()
 
 
     const { userLatitude, userLongitude, destinationLatitude, destinationAddress, destinationLongitude } = useLocationStore()
@@ -26,7 +26,6 @@ const MapScreen = () => {
 
             // Assuming the API returns a polyline geometry in 'coordinates'
             if (data.status === 'SUCCESS') {
-                console.log(data)
                 // Decode the polyline using the 'overview_polyline' field
                 const points = polyline.decode(data.routes[0].overview_polyline);
                 const coordinates = points.map((point: any) => ({
@@ -34,7 +33,7 @@ const MapScreen = () => {
                     longitude: point[1],
                 }));
                 // Set the route coordinates
-                setRouteCoordinates(coordinates as any);
+                setRootCordinates(coordinates as any);
 
             }
 
@@ -50,7 +49,7 @@ const MapScreen = () => {
 
     useEffect(() => {
         fetchDirections();
-    }, [destinationAddress]);
+    }, [destinationAddress, destinationLatitude, destinationLongitude]);
 
     return (
         <View style={styles.container}>
@@ -66,11 +65,11 @@ const MapScreen = () => {
                 <Marker coordinate={{ latitude: userLatitude!, longitude: userLongitude! }} title="Start Location" />
                 <Marker coordinate={{ latitude: destinationLatitude!, longitude: destinationLongitude! }} title="End Location" />
                 {/* Add Polyline for the route */}
-                {routeCoordinates.length > 0 && (
+                {routeCoordinates && routeCoordinates.length > 0 && (
                     <Polyline
-                        coordinates={routeCoordinates}
+                        coordinates={routeCoordinates as any}
                         strokeWidth={5}
-                        strokeColor="blue"
+                        strokeColor="#0CC25F"
                     />
                 )}
             </MapView>

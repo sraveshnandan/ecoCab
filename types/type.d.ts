@@ -109,6 +109,9 @@ declare interface LocationStore {
   destinationLatitude: number | null;
   destinationLongitude: number | null;
   destinationAddress: string | null;
+  routeCoordinates?: []
+
+  setRootCordinates: (data: any) => void;
   setUserLocation: ({
     latitude,
     longitude,

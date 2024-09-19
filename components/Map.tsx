@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
-import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
+import MapView, { Marker, Polyline, PROVIDER_DEFAULT } from "react-native-maps";
 
 import { icons } from "@/constants";
 import { useFetch } from "@/lib/fetch";
@@ -25,6 +25,8 @@ const Map = () => {
   const { data: drivers, loading, error } = useFetch<Driver[]>("/(api)/driver");
   const [markers, setMarkers] = useState<MarkerData[]>([]);
 
+
+  const { routeCoordinates } = useLocationStore()
 
   useEffect(() => {
     if (Array.isArray(drivers)) {
@@ -66,6 +68,7 @@ const Map = () => {
     destinationLatitude,
     destinationLongitude,
   });
+
 
   if (loading || (!userLatitude && !userLongitude))
     return (
@@ -116,8 +119,21 @@ const Map = () => {
             }}
             title="Destination"
           />
+
+
+          <Marker coordinate={{ latitude: userLatitude!, longitude: userLongitude! }} title="Start Location" />
+          {/* Add Polyline for the route */}
+          {routeCoordinates && routeCoordinates.length > 0 && (
+            <Polyline
+              coordinates={routeCoordinates as any}
+              strokeWidth={5}
+              strokeColor="#0CC25F"
+            />
+          )}
         </>
       )}
+
+
 
 
 

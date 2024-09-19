@@ -14,18 +14,18 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import GoogleTextInput from "@/components/PlaceAutoComplete";
-import Map from "@/components/Map";
 import RideCard from "@/components/RideCard";
-import { icons, images, mock_rides } from "@/constants";
+import { icons, images } from "@/constants";
 import { useLocationStore } from "@/store";
 import { useFetch } from "@/lib/fetch";
 import { Ride } from "@/types/type";
 import MapScreen from "@/components/DirectionMap";
+import Map from "@/components/Map";
 
 const Home = () => {
   const { user } = useUser();
   const { signOut } = useAuth();
-  const { setUserLocation, setDestinationLocation, destinationAddress } = useLocationStore();
+  const { setUserLocation, setDestinationLocation, destinationAddress, destinationLatitude } = useLocationStore();
 
   const handleSignOut = () => {
     signOut();
@@ -63,7 +63,11 @@ const Home = () => {
         address: `${address[0].name}, ${address[0].region}`,
       });
     })();
+
+
   }, []);
+
+
 
   const handleDestinationPress = (location: {
     latitude: number;
@@ -121,13 +125,12 @@ const Home = () => {
               containerStyle="bg-white shadow-md shadow-neutral-300"
               handlePress={handleDestinationPress}
             />
-
             <>
               <Text className="text-xl font-JakartaBold mt-5 mb-3">
                 Your current location
               </Text>
-              <View className="flex flex-row items-center bg-transparent h-[300px]">
-                {destinationAddress ? <MapScreen /> : <Map />}
+              <View className="flex flex-row items-center bg-transparent h-[250px] rounded-lg overflow-hidden ">
+                <Map />
               </View>
             </>
 
